@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.List;
+
 public class Fare {
     private final double distance;
     private final int waitTime;
@@ -12,23 +14,52 @@ public class Fare {
     private static final double SERVICE_FEE = 1;
 
     Fare(double distance, int waitTime) {
-        if(distance < 0 || waitTime < 0) {
-            throw new IllegalArgumentException("The values cannot be negative");
-        }
-
+        validateInputs(distance, waitTime); // Encapsulated validation
         this.distance = distance;
         this.waitTime = waitTime;
     }
 
+    private void validateInputs(double distance, int waitTime) {
+        if (distance < 0 || waitTime < 0) {
+            throw new IllegalArgumentException("The values cannot be negative");
+        }
+    }
+
+    private double totalFare() {
+        return (this.distance * FARE_PER_KM) + (this.waitTime * WAITING_FARE_PER_MIN) + BASE_FARE;
+    }
+
+    private double calculateServiceFee(double totalFare) {
+        return (totalFare * SERVICE_FEE)/100;
+    }
+
     public double calculate() {
 
-        double totalFare = (this.distance * FARE_PER_KM) + (this.waitTime * WAITING_FARE_PER_MIN) + BASE_FARE;
+        double totalFare = totalFare();
 
         if(totalFare > 100) {
-            totalFare += (totalFare * SERVICE_FEE)/100;
+            totalFare += calculateServiceFee(totalFare);
         }
 
 
         return Math.max(MINIMUM_FARE, totalFare);
+    }
+
+    public static double calculateForAll(List<Fare> fareList) {
+        double fareSum = 0.0;
+        for(Fare fare: fareList) {
+            fareSum += fare.calculate();
+        }
+
+        return fareSum;
+    }
+
+    public static double calculateTotalServiceFee(List<Fare> fareList) {
+        double totalServiceFee = 0.0;
+        for(Fare fare: fareList) {
+            totalServiceFee += fare.calculateServiceFee(fare.totalFare());
+        }
+
+        return totalServiceFee;
     }
 }
