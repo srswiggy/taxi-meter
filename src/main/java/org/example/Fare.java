@@ -29,8 +29,8 @@ public class Fare {
         return (this.distance * FARE_PER_KM) + (this.waitTime * WAITING_FARE_PER_MIN) + BASE_FARE;
     }
 
-    private double calculateServiceFee(double totalFare) {
-        return (totalFare * SERVICE_FEE)/100;
+    public double calculateServiceFee() {
+        return (this.totalFare() * SERVICE_FEE) / 100;
     }
 
     public double calculate() {
@@ -38,28 +38,9 @@ public class Fare {
         double totalFare = totalFare();
 
         if(totalFare > 100) {
-            totalFare += calculateServiceFee(totalFare);
+            totalFare += calculateServiceFee();
         }
-
 
         return Math.max(MINIMUM_FARE, totalFare);
-    }
-
-    public static double calculateForAll(List<Fare> fareList) {
-        double fareSum = 0.0;
-        for(Fare fare: fareList) {
-            fareSum += fare.calculate();
-        }
-
-        return fareSum;
-    }
-
-    public static double calculateTotalServiceFee(List<Fare> fareList) {
-        double totalServiceFee = 0.0;
-        for(Fare fare: fareList) {
-            totalServiceFee += fare.calculateServiceFee(fare.totalFare());
-        }
-
-        return totalServiceFee;
     }
 }

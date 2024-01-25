@@ -92,46 +92,4 @@ class FareTest {
         Fare fare = new Fare(30, 20);
         assertEquals(406.02, fare.calculate(), 0.1);
     }
-
-    @Test
-    void testTotalFareFor0Rides() {
-        List<Fare> fareList = new ArrayList<>();
-
-        double calculateTotalFair = Fare.calculateForAll(fareList);
-
-        assertEquals(0, calculateTotalFair);
-    }
-
-    @Test
-    void testTotalFareFor2Km10Rides() {
-        List<Fare> fareList = new ArrayList<>(Arrays.asList(
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0),
-                new Fare(2, 0)
-                ));
-
-        double calculateTotalFair = Fare.calculateForAll(fareList);
-
-        assertEquals(260, calculateTotalFair);
-    }
-
-    @Test
-    void testTotalServiceFeePaid() {
-        List<Fare> fareList = new ArrayList<>(Arrays.asList(
-                new Fare(12, 2),
-                new Fare(21, 12),
-                new Fare(12, 3)
-        ));
-
-        double totalServiceFee = Fare.calculateTotalServiceFee(fareList);
-
-        assertEquals(5.7, totalServiceFee, 0.1);
-    }
 }
